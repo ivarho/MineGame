@@ -31,3 +31,15 @@ GameObject::GameObject(int hp)
 	this->hp_init = hp;
 	cout << "New game object created. HP: " << hp << endl;
 }
+
+Mine::Mine(int hp, double size): GameObject(hp)
+{
+	this->size = size;
+}
+
+void Mine::increase_size(double size)
+{
+	this->size += size;
+	cout << "Size of mine increased to: " << this->size << " m3" << endl;
+}
+

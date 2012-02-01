@@ -12,3 +12,10 @@ class GameObject {
 	int decrease_hp(int);
 };
 
+class Mine: public GameObject {
+	double size;
+	public:
+	Mine(int, double);
+	void increase_size(double);
+};
+
