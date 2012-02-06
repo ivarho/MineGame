@@ -1,3 +1,5 @@
+#ifndef GAME_OBJECT_H_INCLUDED
+#define GAME_OBJECT_H_INCLUDED
 
 class GameObject {
 	int hp;
@@ -5,6 +7,7 @@ class GameObject {
 
 	public:
 	GameObject(int);
+	GameObject();
 	void set_hp(int);
 	int get_hp(void);
 	void update(void);
@@ -19,3 +22,4 @@ class Mine: public GameObject {
 	void increase_size(double);
 };
 
+#endif /* GAME_OBJECT_H_INCLUDED */

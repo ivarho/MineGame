@@ -1,86 +1,21 @@
 #include <iostream>
 #include "game_object.hpp"
+#include "liquid_systems.hpp"
 
 using namespace std;
 
-class LiquidSupply : public GameObject
-{
-	LiquidSupply* source;
-	LiquidSupply* destination;
-	protected:
-	double contains;
-	public:
-	void setSource(LiquidSupply* source);
-	void setDestination(LiquidSupply* dest);
-	LiquidSupply(LiquidSupply* source, LiquidSupply* dest);
-	LiquidSupply(void);
-	virtual double consume(double liter);
-	double fill(double liter);
-};
-
-LiquidSupply::LiquidSupply(LiquidSupply* source, LiquidSupply* dest): GameObject(100)
-{
-	this->source = source;
-	this->destination = dest;
-}
-
-LiquidSupply::LiquidSupply(void) : GameObject(100)
-{
-	this->source = NULL;
-	this->destination = NULL;
-}
-
-double LiquidSupply::consume(double liter)
-{
-	if (this->source != NULL) {
-		return this->source->consume(liter);
-	}
-}
-
-class Tank : public LiquidSupply
-{
-	double capacity;
-	//double contents;
-	public:
-	Tank(double capacity);
-	void fill(double liter);
-	double consume(double liter);
-};
-
-Tank::Tank(double capacity) : LiquidSupply(this, NULL)
-{
-	this->capacity = capacity;
-	this->contains = capacity;
-}
-
-double Tank::consume(double liter)
-{
-	double return_val;
-
-	if ((this->contains - liter) >= 0) {
-		this->contains -= liter;
-		return_val = liter;
-	} else {
-		return_val = this->contains;
-		this->contains = 0;
-	}
-
-	cout << "Contents left in tank: " << this->contains << endl;
-	return return_val;
-}
-
 class Engine : public GameObject
 {
-	Tank* fuel_tank;
+	LiquidSupply* fuel_tank;
 
 	public:
-	Engine(Tank* fuel_tank);
+	Engine(LiquidSupply* fuel_tank);
 	bool start(void);
 	bool stop(void);
 	bool is_running(void);
 };
 
-Engine::Engine(Tank* fuel_tank) : GameObject(100)
+Engine::Engine(LiquidSupply* fuel_tank)
 {
 	this->fuel_tank = fuel_tank;
 }
@@ -95,9 +30,9 @@ class ElectricalGenerator : public GameObject
 	void connect_external_fuel_source(LiquidSupply* supply);
 };
 
-ElectricalGenerator::ElectricalGenerator(void) : GameObject(100)
+ElectricalGenerator::ElectricalGenerator(void)
 {
-	this->fuel_tank = new LiquidSupply(new Tank(25.0), NULL);
+	this->fuel_tank = new Tank(25.0);
 	this->engine = new Engine((Tank*)fuel_tank);
 }
 
@@ -114,9 +49,9 @@ void ElectricalGenerator::consume_fuel()
 class Digger : public GameObject
 {
 	double capacity;
-	Mine *mine;
-	Tank *fuel_tank;
-	Engine *engine;
+	Mine* mine;
+	LiquidSupply* fuel_tank;
+	Engine* engine;
 	public:
 	Digger(double);
 	void update(void);
@@ -126,7 +61,7 @@ class Digger : public GameObject
 
 Digger::Digger(double capacity): GameObject(100)
 {
-	this->fuel_tank = new Tank(80.0);
+	this->fuel_tank = new LiquidSupply(new Tank(80.0));
 	this->engine = new Engine(fuel_tank);
 	this->capacity = capacity;
 }
@@ -168,18 +103,30 @@ int main(void)
 
 	Tank* large_fuel_tank = new Tank(1000);
 
-	// Create a fuel pipe used to connect between the large fuel tank
-	// and the electrical generator
-	LiquidSupply* pipe = new LiquidSupply(large_fuel_tank, NULL);
 
 	ElectricalGenerator* generator = new ElectricalGenerator();
 	// Consume fuel from the generator internal fuel tank
 	generator->consume_fuel();
 
+	/// Create a fuel pipe used to connect between the large fuel tank
+	// and the electrical generator
+	LiquidSupply* pipe = new LiquidSupply(large_fuel_tank);
+
 	// Connect an external tank and consume fuel from there instead
 	generator->connect_external_fuel_source(pipe);
 	generator->consume_fuel();
 
+	Tank* test = new Tank(5);
+
+	// Attache a tank to use as fill source for the tank
+	large_fuel_tank->setSource(test);
+
+	generator->consume_fuel();
+
+	// Fill the tank upto 10 liters from the test tank
+	large_fuel_tank->fill(10);
+
+	generator->consume_fuel();
 
 	if (!ny_digger->dig()) {
 		cout << "No connected mine!" << endl;

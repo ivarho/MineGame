@@ -25,6 +25,12 @@ int GameObject::increase_hp(int hp)
 	return this->hp;
 }
 
+GameObject::GameObject()
+{
+	this->set_hp(100);
+	this->hp_init = 100;
+}
+
 GameObject::GameObject(int hp)
 {
 	this->set_hp(hp);

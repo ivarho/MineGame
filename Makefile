@@ -7,7 +7,7 @@ INCLUDES := .
 
 OBJECTS := main.o
 
-SOURCE := main.cpp game_object.cpp
+SOURCE := main.cpp game_object.cpp liquid_systems.cpp
 
 MY_PROGRAM := app
 
