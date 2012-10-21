@@ -4,6 +4,11 @@
 
 using namespace std;
 
+enum fuse_state {
+	STATE_OK,
+	FAILED,
+};
+
 class Engine : public GameObject
 {
 	LiquidSupply* fuel_tank;
@@ -18,6 +23,35 @@ class Engine : public GameObject
 Engine::Engine(LiquidSupply* fuel_tank)
 {
 	this->fuel_tank = fuel_tank;
+}
+
+class ElectricalFuse :public GameObject
+{
+	int limit;
+	enum fuse_state state;
+	public:
+	ElectricalFuse(int);
+	//ElectricalFuse();
+	void set_limit(int);
+	void test(void);
+	void replace_fuse(void);
+	enum fuse_state get_state(void);
+};
+
+ElectricalFuse::ElectricalFuse(int limit)
+{
+	this->limit = limit;
+	this->state = STATE_OK;
+}
+
+void ElectricalFuse::test(void)
+{
+	this->state = FAILED;
+}
+
+void ElectricalFuse::replace_fuse(void)
+{
+	this->state = STATE_OK;
 }
 
 class ElectricalGenerator : public GameObject
@@ -93,13 +127,17 @@ int main(void)
 
 	GameObject* house = new GameObject(10);
 
+	GameObject* house2 = new GameObject(200);
+
+	house2->set_hp(40);
+
 	house->set_hp(200);
 
 	cout << "House object HP: " << house->get_hp() << endl;
 
 	// Create game objects
-	Mine* ny_mine = new Mine(100, 0);
-	Digger* ny_digger = new Digger(2.2);
+	Mine* new_mine = new Mine(100, 0);
+	Digger* new_digger = new Digger(2.2);
 
 	Tank* large_fuel_tank = new Tank(1000);
 
@@ -108,7 +146,7 @@ int main(void)
 	// Consume fuel from the generator internal fuel tank
 	generator->consume_fuel();
 
-	/// Create a fuel pipe used to connect between the large fuel tank
+	// Create a fuel pipe used to connect between the large fuel tank
 	// and the electrical generator
 	LiquidSupply* pipe = new LiquidSupply(large_fuel_tank);
 
@@ -128,13 +166,13 @@ int main(void)
 
 	generator->consume_fuel();
 
-	if (!ny_digger->dig()) {
+	if (!new_digger->dig()) {
 		cout << "No connected mine!" << endl;
 	}
 
-	ny_digger->set_mine(ny_mine);
+	new_digger->set_mine(new_mine);
 
-	if (!ny_digger->dig()) {
+	if (!new_digger->dig()) {
 		cout << "No connected mine!" << endl;
 	}
 
