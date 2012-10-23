@@ -59,15 +59,15 @@ class ElectricalGenerator : public GameObject
 	Engine *engine;
 	LiquidSupply *fuel_tank;
 	public:
-	ElectricalGenerator(void);
-	void consume_fuel();
-	void connect_external_fuel_source(LiquidSupply* supply);
+		ElectricalGenerator(void);
+		void consume_fuel();
+		void connect_external_fuel_source(LiquidSupply* supply);
 };
 
 ElectricalGenerator::ElectricalGenerator(void)
 {
 	this->fuel_tank = new Tank(25.0);
-	this->engine = new Engine((Tank*)fuel_tank);
+	this->engine = new Engine(fuel_tank);
 }
 
 void ElectricalGenerator::connect_external_fuel_source(LiquidSupply* supply)
@@ -98,6 +98,7 @@ Digger::Digger(double capacity): GameObject(100)
 	this->fuel_tank = new LiquidSupply(new Tank(80.0));
 	this->engine = new Engine(fuel_tank);
 	this->capacity = capacity;
+	this->mine = NULL;
 }
 
 void Digger::set_mine(Mine *mine)
@@ -121,6 +122,8 @@ bool Digger::dig(void)
 	}
 }
 
+GameObjectContainer objects;
+
 int main(void)
 {
 	cout << "Game started!" << endl;
@@ -129,7 +132,10 @@ int main(void)
 
 	GameObject* house2 = new GameObject(200);
 
-	house2->set_hp(40);
+	objects.AddGameObject(house);
+	objects.AddGameObject(house2);
+
+	house2->set_hp(10);
 
 	house->set_hp(200);
 
@@ -137,10 +143,15 @@ int main(void)
 
 	// Create game objects
 	Mine* new_mine = new Mine(100, 0);
+	objects.AddGameObject(new_mine);
+
 	Digger* new_digger = new Digger(2.2);
+	objects.AddGameObject(new_digger);
 
 	Tank* large_fuel_tank = new Tank(1000);
+	objects.AddGameObject(large_fuel_tank);
 
+	objects.UpdateAll();
 
 	ElectricalGenerator* generator = new ElectricalGenerator();
 	// Consume fuel from the generator internal fuel tank
@@ -174,6 +185,19 @@ int main(void)
 
 	if (!new_digger->dig()) {
 		cout << "No connected mine!" << endl;
+	}
+
+	uint16_t inputdata;
+
+	cout << "Please write the number of objects to create: ";
+
+	cin >> inputdata;
+
+	cout << endl;
+
+	while (inputdata) {
+		objects.AddGameObject(new GameObject(10));
+		inputdata--;
 	}
 
 	return 0;
