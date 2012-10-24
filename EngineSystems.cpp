@@ -4,7 +4,7 @@
 
 #include "EngineSystems.hpp"
 
-PetrolEngine::PetrolEngine(LiquidSupply* fuel_supply, double fuel_consumption = 0.5)
+PetrolEngine::PetrolEngine(LiquidSupply* fuel_supply, double fuel_consumption)
 {
 	this->fuel_supply = fuel_supply;
 	this->fuel_consuption = fuel_consumption;

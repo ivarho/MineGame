@@ -1,8 +1,8 @@
 /**
  * \file EngineSystems.hpp
  */
-#include "game_object.hpp"
-#include "liquid_systems.hpp"
+#include "GameObject.hpp"
+#include "LiquidSystems.hpp"
 
 class PetrolEngine : public GameObject
 {
@@ -11,7 +11,7 @@ class PetrolEngine : public GameObject
 	bool running;
 
 	public:
-		PetrolEngine(LiquidSupply* fuel_supply, double fuel_consumption);
+		PetrolEngine(LiquidSupply* fuel_supply, double fuel_consumption = 0.5);
 		bool Start(void);
 		bool Stop(void);
 		bool IsRunning(void);

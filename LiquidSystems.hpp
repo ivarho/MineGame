@@ -1,4 +1,7 @@
-#include "game_object.hpp"
+#ifndef _GAMEOBJECT_HPP_
+#define _GAMEOBJECT_HPP_
+
+#include "GameObject.hpp"
 
 class LiquidSupply : public GameObject
 {
@@ -26,3 +29,4 @@ class Tank : public LiquidSupply
 };
 
 
+#endif // _GAMEOBJECT_HPP_

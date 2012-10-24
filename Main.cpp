@@ -1,6 +1,7 @@
 #include <iostream>
-#include "game_object.hpp"
-#include "liquid_systems.hpp"
+#include "GameObject.hpp"
+#include "LiquidSystems.hpp"
+#include "EngineSystems.hpp"
 
 using namespace std;
 
@@ -9,21 +10,7 @@ enum fuse_state {
 	FAILED,
 };
 
-class Engine : public GameObject
-{
-	LiquidSupply* fuel_tank;
 
-	public:
-	Engine(LiquidSupply* fuel_tank);
-	bool start(void);
-	bool stop(void);
-	bool is_running(void);
-};
-
-Engine::Engine(LiquidSupply* fuel_tank)
-{
-	this->fuel_tank = fuel_tank;
-}
 
 class ElectricalFuse :public GameObject
 {
@@ -56,7 +43,7 @@ void ElectricalFuse::replace_fuse(void)
 
 class ElectricalGenerator : public GameObject
 {
-	Engine *engine;
+	PetrolEngine *engine;
 	LiquidSupply *fuel_tank;
 	public:
 		ElectricalGenerator(void);
@@ -67,7 +54,7 @@ class ElectricalGenerator : public GameObject
 ElectricalGenerator::ElectricalGenerator(void)
 {
 	this->fuel_tank = new Tank(25.0);
-	this->engine = new Engine(fuel_tank);
+	this->engine = new PetrolEngine(fuel_tank);
 }
 
 void ElectricalGenerator::connect_external_fuel_source(LiquidSupply* supply)
@@ -85,7 +72,7 @@ class Digger : public GameObject
 	double capacity;
 	Mine* mine;
 	LiquidSupply* fuel_tank;
-	Engine* engine;
+	PetrolEngine* engine;
 	public:
 	Digger(double);
 	void update(void);
@@ -96,7 +83,7 @@ class Digger : public GameObject
 Digger::Digger(double capacity): GameObject(100)
 {
 	this->fuel_tank = new LiquidSupply(new Tank(80.0));
-	this->engine = new Engine(fuel_tank);
+	this->engine = new PetrolEngine(fuel_tank);
 	this->capacity = capacity;
 	this->mine = NULL;
 }

@@ -5,11 +5,11 @@ CXXFLAGS := -g -O2
 
 INCLUDES := .
 
-OBJECTS := main.o game_object.o liquid_systems.o
+OBJECTS := Main.o GameObject.o LiquidSystems.o EngineSystems.o
 
-SOURCE := main.cpp game_object.cpp liquid_systems.cpp
+SOURCE := Main.cpp GameObject.cpp LiquidSystems.cpp
 
-MY_PROGRAM := app
+MY_PROGRAM := Application
 
 all: $(MY_PROGRAM)
 
@@ -18,14 +18,20 @@ all: $(MY_PROGRAM)
 $(MY_PROGRAM): $(OBJECTS)
 	$(CXX) -I$(INCLUDES) $(CXXFLAGS) $(OBJECTS) -o $(MY_PROGRAM)
 
-main.o: main.cpp
-	$(CXX) -c -I$(INCLUDES) $(CXXFLAGS) main.cpp -o main.o
+Main.o: Main.cpp
+	$(CXX) -c -I$(INCLUDES) $(CXXFLAGS) Main.cpp -o Main.o
 
-liquid_systems.o: liquid_systems.cpp
-	$(CXX) -c -I$(INCLUDES) $(CXXFLAGS) liquid_systems.cpp -o liquid_systems.o
+LiquidSystems.o: LiquidSystems.cpp
+	$(CXX) -c -I$(INCLUDES) $(CXXFLAGS) LiquidSystems.cpp -o LiquidSystems.o
 
-game_object.o: game_object.cpp
-	$(CXX) -c -I$(INCLUDES) $(CXXFLAGS) game_object.cpp -o game_object.o
+GameObject.o: GameObject.cpp
+	$(CXX) -c -I$(INCLUDES) $(CXXFLAGS) GameObject.cpp -o GameObject.o
+
+EngineSystems.o: EngineSystems.cpp
+	$(CXX) -c -I$(INCLUDES) $(CXXFLAGS) EngineSystems.cpp -o EngineSystems.o
+
+ElectricalSystems.o: ElectricalSystems.cpp
+	$(CXX) -c -I$(INCLUDES) $(CXXFLAGS) ElectricalSystems.cpp -o ElectricalSystems.o
 
 #%.o: %.cpp
 #	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $(input) -o $(output)
